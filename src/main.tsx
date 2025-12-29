@@ -2,6 +2,20 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
+import faviconUrl from './assets/favicon.png'
+
+function setFavicon(href: string) {
+  let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null
+  if (!link) {
+    link = document.createElement('link')
+    link.rel = 'icon'
+    document.head.appendChild(link)
+  }
+  link.type = 'image/png'
+  link.href = href
+}
+
+setFavicon(faviconUrl)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
