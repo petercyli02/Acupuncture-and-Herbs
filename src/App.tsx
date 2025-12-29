@@ -430,7 +430,7 @@ function App() {
                   <a href="tel:07835226135" className="text-emerald-400 hover:underline">+44 7835 226135</a>
                 </p>
                 <p>
-                  <a href="mailto:contact@acupunctureandherbalremedies.com" className="text-emerald-400 hover:underline">contact@acupunctureandherbalremedies.com</a>
+                  <a href="mailto:lgy13998330017@hotmail.com" className="text-emerald-400 hover:underline">lgy13998330017@hotmail.com</a>
                 </p>
               </div>
             </div>
@@ -445,7 +445,7 @@ function App() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Acupuncture & Herbal Remedies. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Acupuncture & Herbs. All rights reserved.</p>
           </div>
         </div>
       </footer>
