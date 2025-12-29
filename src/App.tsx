@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import logo from './assets/A&H logo no background.png'
 import janney from './assets/Guangyan Liu.jpg'
 import ContactForm from './components/ContactForm'
@@ -6,10 +6,15 @@ import ContactForm from './components/ContactForm'
 function App() {
   const [activeSection, setActiveSection] = useState('introduction')
 
+  const getNavHeight = useCallback(() => {
+    const nav = document.getElementById('site-nav')
+    return nav?.offsetHeight ?? 80
+  }, [])
+
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['introduction', 'how-it-works', 'testimonials', 'services', 'contact']
-      const scrollPosition = window.scrollY + 200
+      const scrollPosition = window.scrollY + getNavHeight() + 40
 
       for (const section of sections) {
         const element = document.getElementById(section)
@@ -30,8 +35,8 @@ function App() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      const navHeight = 80
-      const elementPosition = element.offsetTop - navHeight
+      const navHeight = getNavHeight()
+      const elementPosition = element.offsetTop - navHeight - 12
       window.scrollTo({
         top: elementPosition,
         behavior: 'smooth'
@@ -43,11 +48,28 @@ function App() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="text-2xl font-bold text-gray-800">Acupuncture & Herbs</div>
-            <div className="flex space-x-2">
+      <nav
+        id="site-nav"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm"
+        aria-label="Primary navigation"
+      >
+        <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 sm:py-0 sm:h-20">
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-xl sm:text-2xl font-bold text-gray-800 hover:text-emerald-700 transition-colors text-left"
+              aria-label="Back to top"
+            >
+              Acupuncture & Herbs
+            </button>
+
+            {/* Tabs: horizontal scroll on mobile, standard on larger screens */}
+            <div className="-mx-7 sm:mx-0 px-7 sm:px-0">
+              <div
+                className="flex gap-2 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 sm:overflow-visible sm:whitespace-normal"
+                aria-label="Page sections"
+              >
               {[
                 { id: 'introduction', label: 'Introduction' },
                 { id: 'how-it-works', label: 'How it works' },
@@ -58,7 +80,7 @@ function App() {
                 <button
                   key={tab.id}
                   onClick={() => scrollToSection(tab.id)}
-                  className={`px-5 py-2.5 rounded-lg text-base font-medium transition-all duration-200 ${activeSection === tab.id
+                  className={`shrink-0 px-3 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base rounded-lg font-medium transition-all duration-200 ${activeSection === tab.id
                       ? 'bg-emerald-700 text-white shadow-md'
                       : 'text-gray-700 hover:bg-gray-100 hover:text-emerald-700'
                     }`}
@@ -66,19 +88,22 @@ function App() {
                   {tab.label}
                 </button>
               ))}
+              </div>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Header with Logo */}
-      <div className="relative bg-stone-50 pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative bg-stone-50 pt-40 sm:pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
           <div className="flex flex-col items-center justify-center text-center">
+            <h1 className="sr-only">Acupuncture &amp; Herbs</h1>
             <img
               src={logo}
-              alt="Acupuncture & Herbs Logo"
+              alt="Acupuncture & Herbs logo"
               className="h-auto max-w-2xl w-full mb-6"
+              loading="eager"
             />
             <p className="text-xl text-stone-700 mb-2">
               Acupuncture. Herbs. Wisdom.
@@ -91,34 +116,34 @@ function App() {
       </div>
 
       {/* Content Sections */}
-      <main>
+      <main aria-label="Main content">
         {/* Introduction Section */}
         <section id="introduction" className="py-20 bg-emerald-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-stone-800 mb-4">Introduction</h2>
               <div className="w-24 h-1 bg-emerald-700 mx-auto"></div>
             </div>
             <div className="max-w-4xl mx-auto text-lg text-stone-700 leading-relaxed space-y-6">
               <p>
-                We are an ethical, newly formed company, our staff based in the U.K. for over 15 years now.
+                We are an ethical, newly formed company with staff based in the U.K. for over 15 years.
               </p>
               <p>
-                We use Traditional Chinese medicine, a renowned form of alternative medicine. Treatments we offer include acupuncture, cupping, herbs for a wide range of health problems.
+                We use Traditional Chinese medicine, a renowned form of alternative medicine. Treatments we offer include acupuncture, cupping, and herbs for a wide range of health problems.
               </p>
               <p>
-                Our body is a small universe within a big universe. By researching its motion law, the force can be calculated. The motion of the sun and the moon affect our bodies flow of energy the most. A powerful example of the moon's influence on earth are the tides flowing in and out.
+                Our body is a small universe within a big universe. By researching its motion law, the force can be calculated. The motion of the sun and the moon affect our body’s flow of energy the most. A powerful example of the moon’s influence on Earth is the tides flowing in and out.
               </p>
               <div className="bg-white p-6 rounded-lg my-8 border-l-4 border-emerald-700">
                 <p className="mb-4">
-                  <strong className="text-emerald-800">Acupuncture</strong> is using needles to adjust the flow of energy in our body.
+                  <strong className="text-emerald-800">Acupuncture</strong> uses needles to adjust the flow of energy in our body.
                 </p>
                 <p>
-                  <strong className="text-emerald-800">Herbal Medicine</strong> works in a similar way by their special tastes and smells to adjust the body's energy.
+                  <strong className="text-emerald-800">Herbal Medicine</strong> works in a similar way, using special tastes and smells to adjust the body’s energy.
                 </p>
               </div>
               <p>
-                The doctor will sit and talk with you, look at your tongue and take your pulse. To the trained eye your tongue is a wealth of information. The colour, coating, shape, wetness and cracks of the tongue map out the condition of your internal organs as well as your mental and emotional health. The doctor feels your pulse, distinguishing between hundreds of different types of pulse to find out the condition of your organs. These practices may sound far-fetched, but this system of medicine is highly detailed and the result of over 3000 years of clinical testing. From this consultation the doctor will explain the diagnosis and recommend treatment. This will probably be a combination of acupuncture and Chinese herbs.
+                The doctor will sit and talk with you, look at your tongue, and take your pulse. To the trained eye, your tongue is a wealth of information: the colour, coating, shape, wetness, and cracks of the tongue map out the condition of your internal organs as well as your mental and emotional health. The doctor also feels your pulse, distinguishing between hundreds of different types of pulse to understand the condition of your organs. These practices may sound far-fetched, but this system of medicine is highly detailed and the result of over 3000 years of clinical testing. From this consultation the doctor will explain the diagnosis and recommend treatment—this will probably be a combination of acupuncture and Chinese herbs.
               </p>
             </div>
           </div>
@@ -126,11 +151,11 @@ function App() {
 
         {/* How it Works Section */}
         <section id="how-it-works" className="py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-stone-800 mb-4">How it works</h2>
               <div className="w-24 h-1 bg-emerald-700 mx-auto mb-4"></div>
-              <p className="text-xl text-stone-700">An Easy Way to Understand how Acupuncture Works to Heal the Body</p>
+              <p className="text-xl text-stone-700">An easy way to understand how acupuncture works to heal the body</p>
             </div>
 
             {/* YouTube Video Embed */}
@@ -144,6 +169,9 @@ function App() {
                   className="absolute top-0 left-0 w-full h-full"
                 ></iframe>
               </div>
+              <p className="mt-3 text-sm text-stone-600 text-center">
+                Video: “How Acupuncture Works to Heal the Body” (starts at 0:08)
+              </p>
             </div>
 
             <div className="max-w-4xl mx-auto">
@@ -169,7 +197,7 @@ function App() {
 
         {/* Testimonials Section */}
         <section id="testimonials" className="py-24 bg-teal-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Testimonials</h2>
               <div className="w-24 h-1 bg-teal-700 mx-auto"></div>
@@ -208,9 +236,14 @@ function App() {
                 <h2 className="text-4xl font-bold text-stone-800 mb-4">About - our practitioner</h2>
                 <div className="w-24 h-1 bg-teal-700 mx-auto"></div>
               </div>
-              <div className="flex justify-center items-center gap-16">
-                <img src={janney} alt="Janney Liu" className="w-1/5 h-auto rounded-full shadow-md" />
-                <div className="bg-white p-8 rounded-lg shadow-md">
+              <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+                <img
+                  src={janney}
+                  alt="Janney Liu"
+                  className="w-40 sm:w-48 md:w-1/5 h-auto rounded-full shadow-md"
+                  loading="lazy"
+                />
+                <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-auto">
                   <h3 className="text-2xl font-semibold text-stone-900 mb-4">Welcome. I am Janney Liu</h3>
                   <p className="text-lg text-stone-700 mb-6">
                     I am a Practitioner / Therapist of Traditional Chinese Medicine.
@@ -240,7 +273,7 @@ function App() {
 
         {/* Services Section */}
         <section id="services" className="py-24 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-stone-800 mb-4">Services</h2>
               <div className="w-24 h-1 bg-emerald-700 mx-auto mb-4"></div>
@@ -258,7 +291,7 @@ function App() {
                   Normally, a treatment course for infertility takes between 3 to 6 months, as the effects of treatment can only be observed with each passing menstrual cycle.
                 </p>
                 <p>
-                  We also provide complementary acupuncture to support those undergoing IVF, which adapts to suit the needs of each stage of IVF as you go through the process. Research shows that acupuncture is effective at correcting hormone imbalances, often the underlying cause of fertility issues. Acupuncture also promotes ovulation, and stimulates the body's self healing abilities, which helps improve the uterus condition. Physical benefits aside, getting acupuncture is a great mean of relaxing and relieving stress, making acupuncture the ideal therapy to accompany the stressful IVF process.
+                  We also provide complementary acupuncture to support those undergoing IVF, which adapts to suit the needs of each stage of IVF as you go through the process. Research shows that acupuncture is effective at correcting hormone imbalances, often the underlying cause of fertility issues. Acupuncture also promotes ovulation and stimulates the body’s self healing abilities, which helps improve the uterus condition. Physical benefits aside, getting acupuncture is a great means of relaxing and relieving stress, making acupuncture the ideal therapy to accompany the stressful IVF process.
                 </p>
                 <p>
                   Using herbal medicine in conjunction with acupuncture can greatly improve the result of the treatment. Out of a diverse range of traditional herbal medicines, we offer to prescribe herbal remedies tailored to your needs.
@@ -278,10 +311,10 @@ function App() {
                     Acupuncture involves the insertion of very fine needles at specific acupuncture points along various meridians in order to unblock the flow of Qi through the body. It is a painless and relaxing treatment that has been widely accepted by Western medicine. There are alternative techniques available if you have a fear of needles.
                   </p>
                   <p>
-                    It was utilised by the NHS, who are considering its prospects for wide-spread recommendation, because
+                    It was utilised by the NHS, who are considering its prospects for wide-spread recommendation, because:
                   </p>
                   <p className="font-semibold text-emerald-800">
-                    Acupuncture works amazingly ! Pain relief ! safe, natural & effective.....
+                    “Acupuncture works amazingly! Pain relief! Safe, natural & effective.....”
                   </p>
                   <p>
                     Over 3000 years of wisdom, knowledge and experience. Come, and you can feel the effect immediately!
@@ -322,7 +355,7 @@ function App() {
 
         {/* Contact Section */}
         <section id="contact" className="py-24 bg-emerald-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-stone-800 mb-4">CONTACT US</h2>
               <div className="w-24 h-1 bg-emerald-700 mx-auto"></div>
@@ -381,7 +414,7 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-7 sm:px-8 lg:px-10 py-12">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
               <h4 className="text-white font-semibold mb-4">ABOUT US</h4>
