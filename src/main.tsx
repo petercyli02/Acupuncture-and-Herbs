@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
-import faviconUrl from './assets/favicon.png'
+import faviconUrl from './assets/favicon2.jpg'
 
 function setFavicon(href: string) {
   let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null
