@@ -101,8 +101,8 @@ export default function ContactForm() {
         serviceId,
         templateId,
         {
-          from_name: data.name,
-          from_email: data.email,
+          name: data.name,
+          email: data.email,
           phone: data.phone || 'Not provided',
           message: data.message,
         },
